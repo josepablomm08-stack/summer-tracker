@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Summer" />
+<meta name="theme-color" content="#F5EFE4" />
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgZmlsbD0iIzFGM0EyRSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTglIiBmb250LWZhbWlseT0iR2VvcmdpYSIgZm9udC1zaXplPSI4NSIgZmlsbD0iI0Q0QUYzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zdHlsZT0iaXRhbGljIj5DPC90ZXh0Pjwvc3ZnPg==" />
+<title>Summer Cut</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: #F5EFE4; color: #2C2418; font-family: Georgia, serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+.container { max-width: 640px; margin: 0 auto; padding: 28px 20px; padding-top: max(28px, env(safe-area-inset-top)); padding-bottom: max(28px, env(safe-area-inset-bottom)); }
+.header { padding-bottom: 20px; margin-bottom: 24px; border-bottom: 1px solid #C9B896; }
+.header-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; gap: 12px; flex-wrap: wrap; }
+.label-tiny { font-family: -apple-system, sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; color: #8B7355; font-weight: 500; }
+.countdown { font-family: -apple-system, sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 700; color: #1F3A2E; }
+.h1 { font-size: 44px; font-weight: 700; line-height: 1; font-style: italic; color: #1F3A2E; letter-spacing: -0.02em; margin-bottom: 8px; }
+.focus { font-size: 14px; font-style: italic; color: #6B5B43; }
+.tabs { display: flex; border-bottom: 1px solid #E5DCC9; margin-bottom: 24px; }
+.tab { flex: 1; padding: 12px 8px; font-family: -apple-system, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 500; color: #A89580; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; }
+.tab.active { color: #1F3A2E; border-bottom-color: #1F3A2E; }
+.day-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; }
+.day-name { font-size: 24px; font-style: italic; color: #1F3A2E; }
+.day-date { font-size: 13px; color: #6B5B43; }
+.done-num { font-size: 32px; font-weight: 700; color: #1F3A2E; font-style: italic; }
+.done-num span { color: #C9B896; }
+.alert { background: #F5E6D3; border-left: 3px solid #B8612B; padding: 14px; border-radius: 4px; margin-bottom: 18px; }
+.alert-title { font-weight: 700; color: #8B4520; margin-bottom: 2px; font-size: 14px; }
+.alert-text { color: #6B4520; font-size: 13px; }
+.all-done { background: #1F3A2E; color: #F5EFE4; padding: 20px; border-radius: 4px; margin-bottom: 18px; text-align: center; }
+.all-done-text { font-size: 19px; font-style: italic; }
+.habits { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.habit { background: #FAF6EC; border: 1px solid #E5DCC9; border-radius: 4px; padding: 14px; cursor: pointer; text-align: left; width: 100%; font-family: inherit; }
+.habit.done { background: #1F3A2E; border-color: #1F3A2E; color: #F5EFE4; }
+.habit-row { display: flex; gap: 12px; align-items: flex-start; }
+.habit-circle { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid #C9B896; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
+.habit.done .habit-circle { background: #F5EFE4; border: none; color: #1F3A2E; font-weight: 700; }
+.habit-content { flex: 1; min-width: 0; }
+.habit-label { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.habit.done .habit-label { text-decoration: line-through; opacity: 0.75; }
+.habit-why { font-size: 12px; font-style: italic; color: #8B7355; }
+.habit.done .habit-why { color: #A8C9A8; }
+.habit-stats { display: flex; gap: 12px; margin-top: 6px; font-family: -apple-system, sans-serif; font-size: 11px; }
+.streak { color: #B8612B; font-weight: 600; }
+.habit.done .streak { color: #D4AF37; }
+.week-count { color: #A89580; }
+.habit.done .week-count { color: #D4C9B0; }
+.records { padding-top: 20px; margin-top: 28px; border-top: 1px solid #C9B896; }
+.records-title { font-family: -apple-system, sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 0.25em; color: #8B7355; margin-bottom: 14px; }
+.records-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.record-num { font-size: 28px; font-style: italic; color: #1F3A2E; }
+.record-label { font-size: 11px; font-style: italic; color: #8B7355; }
+.section-head { margin-bottom: 18px; }
+.section-head h2 { font-size: 24px; font-style: italic; color: #1F3A2E; }
+.section-head p { font-size: 14px; font-style: italic; color: #6B5B43; margin-top: 4px; }
+.timeline-item { background: #FAF6EC; border: 1px solid #E5DCC9; padding: 14px; border-radius: 4px; margin-bottom: 8px; display: flex; gap: 12px; }
+.timeline-icon { font-size: 20px; }
+.timeline-time { font-family: -apple-system, sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 0.25em; color: #8B7355; font-weight: 700; margin-bottom: 2px; }
+.timeline-label { font-size: 14px; font-weight: 500; color: #2C2418; }
+.info-box { background: #1F3A2E; color: #F5EFE4; padding: 16px; border-radius: 4px; font-size: 14px; margin-top: 20px; }
+.info-box strong { color: #D4AF37; }
+.info-box p { margin-bottom: 8px; }
+.info-box p:last-child { margin-bottom: 0; }
+.info-card { background: #FAF6EC; border: 1px solid #E5DCC9; padding: 16px; border-radius: 4px; margin-bottom: 14px; }
+.info-card h3 { font-size: 18px; font-style: italic; color: #1F3A2E; margin-bottom: 6px; }
+.info-card .meta { font-size: 11px; font-style: italic; color: #8B7355; margin-bottom: 10px; }
+.info-card ul { list-style: none; }
+.info-card li { font-size: 14px; color: #3D3221; padding: 2px 0 2px 12px; position: relative; }
+.info-card li::before { content: '·'; position: absolute; left: 0; }
+.info-card .footnote { font-size: 12px; font-style: italic; color: #6B5B43; margin-top: 10px; }
+.info-card .upgrade { background: #F5EFE4; padding: 12px; border-radius: 4px; margin-top: 8px; font-size: 13px; }
+.info-card .upgrade strong { color: #1F3A2E; }
+.footer { text-align: center; margin-top: 36px; font-size: 11px; font-style: italic; color: #A89580; }
+.tea-tracker { background: #FAF6EC; border: 1px solid #E5DCC9; border-radius: 4px; padding: 16px; margin-bottom: 14px; }
+.tea-tracker h3 { font-size: 16px; font-style: italic; color: #1F3A2E; margin-bottom: 8px; }
+.tea-count { display: flex; gap: 6px; margin: 12px 0; }
+.tea-glass { flex: 1; height: 32px; background: #F5EFE4; border: 1.5px solid #C9B896; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; }
+.tea-glass.filled { background: #1F3A2E; border-color: #1F3A2E; color: #D4AF37; }
+.tea-meta { font-size: 12px; color: #6B5B43; font-style: italic; }
+.tea-warn { font-size: 12px; color: #B8612B; font-weight: 600; margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<div class="header-top">
+<div class="label-tiny">· Summer Cut ·</div>
+<div class="countdown" id="today-pct">0% today</div>
+</div>
+<h1 class="h1">Cut Mode.</h1>
+<p class="focus">Wake. Move. Hit protein. Rest. Repeat.</p>
+</div>
+<div class="tabs">
+<button class="tab active" data-tab="today">Today</button>
+<button class="tab" data-tab="schedule">Schedule</button>
+<button class="tab" data-tab="food">Food</button>
+</div>
+<div id="tab-today">
+<div class="day-row">
+<div>
+<div class="label-tiny">Today</div>
+<div class="day-name" id="day-name"></div>
+<div class="day-date" id="day-date"></div>
+</div>
+<div style="text-align:right;">
+<div class="label-tiny">Done</div>
+<div class="done-num"><span id="done-count">0</span><span>/8</span></div>
+</div>
+</div>
+<div class="alert" id="slipup-alert" style="display:none;">
+<div class="alert-title">Never miss twice.</div>
+<div class="alert-text">Yesterday wasn't perfect. That's data, not failure. Today matters more.</div>
+</div>
+<div class="all-done" id="all-done" style="display:none;">
+<div class="all-done-text">All eight. That's the day.</div>
+</div>
+<div class="habits" id="habits-list"></div>
+<div class="tea-tracker">
+<h3>Iced Tea Tracker</h3>
+<div class="tea-meta">Nature's Factory powdered tea · Limit: 4 servings/week max</div>
+<div class="tea-count" id="tea-count"></div>
+<div class="tea-meta">Tap a glass to log a serving this week.</div>
+<div class="tea-warn" id="tea-warn" style="display:none;">At the weekly limit. Switch to water or brewed tea.</div>
+</div>
+<div class="records">
+<div class="records-title">Personal records</div>
+<div class="records-grid">
+<div><div class="record-num" id="rec-pct">0%</div><div class="record-label">overall completion rate</div></div>
+<div><div class="record-num" id="rec-streak">0</div><div class="record-label">longest streak (days)</div></div>
+<div><div class="record-num" id="rec-days">0</div><div class="record-label">days you showed up</div></div>
+<div><div class="record-num" id="rec-perfect">0</div><div class="record-label">perfect days (all 8)</div></div>
+</div>
+</div>
+</div>
+<div id="tab-schedule" style="display:none;">
+<div class="section-head">
+<div class="label-tiny">Daily timeline · Summer</div>
+<h2 id="sched-day"></h2>
+<p>The rhythm. Just the cut.</p>
+</div>
+<div id="timeline-list"></div>
+</div>
+<div id="tab-food" style="display:none;">
+<div class="section-head">
+<div class="label-tiny">Cutting · High protein</div>
+<h2>Summer food</h2>
+<p>Simple meals toward lean.</p>
+</div>
+<div class="info-card">
+<h3>Cutting Bowl</h3>
+<div class="meta">~280 cal · 22g protein · 3 min</div>
+<ul>
+<li>170g plain nonfat Greek yogurt</li>
+<li>1 cup strawberries sliced</li>
+<li>15g almonds chopped (about 12)</li>
+<li>Optional cinnamon</li>
+</ul>
+<div class="footnote">Want sweeter? 1 tsp honey adds 20 cal.</div>
+</div>
+<div class="info-card">
+<h3>Healthy Sandwich</h3>
+<div class="meta">~400 cal · 30g protein · 5 min</div>
+<ul>
+<li>2 slices whole grain or sourdough bread</li>
+<li>100g sliced turkey breast</li>
+<li>1 slice cheese</li>
+<li>Big handful spinach or lettuce</li>
+<li>Sliced tomato and cucumber</li>
+<li>1 tsp mustard or 1/4 mashed avocado (skip mayo)</li>
+</ul>
+<div class="upgrade"><strong>Cutting tips:</strong> Turkey beats ham. Mustard saves 100 cal vs mayo. Pile on greens.</div>
+</div>
+<div class="info-card">
+<h3>Iced Tea (Nature's Factory)</h3>
+<div class="meta">Powdered tea you have · 0 cal</div>
+<ul>
+<li>Mix as directed on the package</li>
+<li>Chill or pour over ice</li>
+<li>Add fresh lemon if you want</li>
+</ul>
+<div class="upgrade"><strong>Weekly limit: 4 servings max.</strong> Contains caramel color (4-MEI), artificial lemon flavor, maltodextrin, and sucralose. Fine in moderation. Track in the tea tracker.</div>
+<div class="footnote">On non-tea days: water or brew real tea with lemon.</div>
+</div>
+<div class="info-box">
+<p><strong>Cutting truth:</strong> Hit protein daily, stay in a small deficit, walk a lot. That's it.</p>
+<p><strong>Protein target:</strong> ~120g/day. Bowl + sandwich + shake + dinner gets you there.</p>
+</div>
+</div>
+<div class="footer">Tap to mark done. Saves automatically.</div>
+</div>
+<script>
+const HABITS = [
+{ id: 'wake', label: 'Wake up at 9 AM', emoji: 'W', why: 'No snoozing past 9.' },
+{ id: 'protein_creatine', label: 'Protein + creatine (4 PM)', emoji: 'P', why: 'Daily creatine. Protein around training.' },
+{ id: 'gym', label: 'Hit the gym', emoji: 'G', why: 'Train. Push. Show up.' },
+{ id: 'steps', label: '12,000 steps', emoji: 'S', why: 'Fat loss happens here.' },
+{ id: 'protein_target', label: 'Hit protein target (~120g)', emoji: 'T', why: 'Bowl + sandwich + shake + dinner.' },
+{ id: 'eat_clean', label: 'Eat clean (no junk)', emoji: 'E', why: 'One off-meal fine. Off-day not.' },
+{ id: 'phone_curfew', label: 'Phone away by midnight', emoji: 'C', why: 'Different room.' },
+{ id: 'sleep', label: 'Sleep 7+ hours', emoji: 'Z', why: 'Recovery. Fat loss. Mood.' },
+];
+const TIMELINE = [
+{ time: '9:00 AM', label: 'Wake up. No snoozing.', icon: 'W' },
+{ time: '9:15 AM', label: 'Yogurt bowl + water', icon: 'B' },
+{ time: '10:00 AM', label: 'Morning walk (steps + sun)', icon: 'M' },
+{ time: '12:30 PM', label: 'Lunch (turkey sandwich)', icon: 'L' },
+{ time: '2:00 PM', label: 'Steps check toward 12k', icon: 'S' },
+{ time: '4:00 PM', label: 'Protein + creatine', icon: 'P' },
+{ time: '4:10 PM', label: 'Leave for gym', icon: 'G' },
+{ time: '4:30 PM', label: 'Train', icon: 'T' },
+{ time: '6:00 PM', label: 'Steps check final push', icon: 'S' },
+{ time: '7:00 PM', label: 'Dinner (protein + veg)', icon: 'D' },
+{ time: '9:00 PM', label: 'Wind down', icon: 'N' },
+{ time: '12:00 AM', label: 'Phone in another room', icon: 'X' },
+{ time: '12:30 AM', label: 'Lights out', icon: 'Z' },
+];
+function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function daysAgoKey(n){const d=new Date();d.setDate(d.getDate()-n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function weekKey(){const d=new Date();const dow=d.getDay();const s=new Date(d);s.setDate(d.getDate()-dow);return s.getFullYear()+'-W'+String(s.getMonth()+1).padStart(2,'0')+'-'+String(s.getDate()).padStart(2,'0');}
+function loadData(){try{return JSON.parse(localStorage.getItem('summer_v1')||'{}');}catch(e){return {};}}
+function saveData(d){localStorage.setItem('summer_v1',JSON.stringify(d));}
+function loadTea(){try{return JSON.parse(localStorage.getItem('summer_tea_v1')||'{}');}catch(e){return {};}}
+function saveTea(d){localStorage.setItem('summer_tea_v1',JSON.stringify(d));}
+let data = loadData();
+let tea = loadTea();
+const today = todayKey();
+const thisWeek = weekKey();
+function toggle(id){if(!data[today])data[today]={};data[today][id]=!data[today][id];saveData(data);render();}
+function toggleTea(i){if(!tea[thisWeek])tea[thisWeek]=0;if(i<tea[thisWeek]){tea[thisWeek]=i;}else{tea[thisWeek]=i+1;}saveTea(tea);render();}
+function getStreak(id){let s=0;for(let i=0;i<365;i++){if(data[daysAgoKey(i)]&&data[daysAgoKey(i)][id])s++;else break;}return s;}
+function getLast7(id){let c=0;for(let i=0;i<7;i++)if(data[daysAgoKey(i)]&&data[daysAgoKey(i)][id])c++;return c;}
+function render(){
+const now = new Date();
+document.getElementById('day-name').textContent = now.toLocaleDateString('en-US',{weekday:'long'});
+document.getElementById('day-date').textContent = now.toLocaleDateString('en-US',{month:'long',day:'numeric'});
+document.getElementById('sched-day').textContent = now.toLocaleDateString('en-US',{weekday:'long'});
+const td = data[today] || {};
+const completed = HABITS.filter(h => td[h.id]).length;
+document.getElementById('done-count').textContent = completed;
+const pct = Math.round((completed/HABITS.length)*100);
+document.getElementById('today-pct').textContent = pct + '% today';
+const yKey = daysAgoKey(1);
+const yData = data[yKey];
+const slip = yData && HABITS.some(h => !yData[h.id]);
+document.getElementById('slipup-alert').style.display = (slip && completed < HABITS.length) ? 'block' : 'none';
+document.getElementById('all-done').style.display = (completed === HABITS.length) ? 'block' : 'none';
+const list = document.getElementById('habits-list');
+list.innerHTML = '';
+HABITS.forEach(h => {
+const done = !!td[h.id];
+const streak = getStreak(h.id);
+const last7 = getLast7(h.id);
+const btn = document.createElement('button');
+btn.className = 'habit' + (done ? ' done' : '');
+btn.onclick = () => toggle(h.id);
+btn.innerHTML = '<div class="habit-row"><div class="habit-circle">'+(done?'+':h.emoji)+'</div><div class="habit-content"><div class="habit-label">'+h.label+'</div><div class="habit-why">'+h.why+'</div><div class="habit-stats">'+(streak>0?'<span class="streak">'+streak+'d</span>':'')+'<span class="week-count">'+last7+'/7 wk</span></div></div></div>';
+list.appendChild(btn);
+});
+const teaCount = tea[thisWeek] || 0;
+const teaEl = document.getElementById('tea-count');
+teaEl.innerHTML = '';
+for(let i=0;i<4;i++){
+const g = document.createElement('div');
+g.className = 'tea-glass' + (i < teaCount ? ' filled' : '');
+g.textContent = i < teaCount ? '+' : '.';
+g.onclick = () => toggleTea(i);
+teaEl.appendChild(g);
+}
+document.getElementById('tea-warn').style.display = teaCount >= 4 ? 'block' : 'none';
+const allDays = Object.keys(data);
+const totalDays = allDays.filter(k => Object.values(data[k]).some(v => v)).length;
+const totalH = Object.values(data).reduce((s,d) => s + Object.values(d).filter(v => v).length, 0);
+const opct = totalDays > 0 ? Math.round((totalH / (totalDays * HABITS.length)) * 100) : 0;
+let bestStreak = 0;
+HABITS.forEach(h => {
+let cur = 0, best = 0;
+for(let i=0;i<365;i++){
+if(data[daysAgoKey(i)] && data[daysAgoKey(i)][h.id]){cur++;if(cur>best)best=cur;}
+else cur=0;
+}
+if(best > bestStreak) bestStreak = best;
+});
+const pdays = allDays.filter(k => HABITS.every(h => data[k][h.id])).length;
+document.getElementById('rec-pct').textContent = opct + '%';
+document.getElementById('rec-streak').textContent = bestStreak;
+document.getElementById('rec-days').textContent = totalDays;
+document.getElementById('rec-perfect').textContent = pdays;
+const tl = document.getElementById('timeline-list');
+tl.innerHTML = '';
+TIMELINE.forEach(t => {
+const div = document.createElement('div');
+div.className = 'timeline-item';
+div.innerHTML = '<div class="timeline-icon">'+t.icon+'</div><div><div class="timeline-time">'+t.time+'</div><div class="timeline-label">'+t.label+'</div></div>';
+tl.appendChild(div);
+});
+}
+document.querySelectorAll('.tab').forEach(t => {
+t.onclick = () => {
+document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+t.classList.add('active');
+['today','schedule','food'].forEach(id => {
+document.getElementById('tab-' + id).style.display = 'none';
+});
+document.getElementById('tab-' + t.dataset.tab).style.display = 'block';
+};
+});
+render();
+</script>
+</body>
+</html>
